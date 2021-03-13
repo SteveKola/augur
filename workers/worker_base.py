@@ -19,6 +19,9 @@ class Worker():
 
     ROOT_AUGUR_DIR = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
 
+    ## Set Thread Safety for OSX
+    os.system("./osx-thread.sh")
+
     def __init__(self, worker_type, config={}, given=[], models=[], data_tables=[], operations_tables=[], platform="github"):
 
         self.worker_type = worker_type
@@ -354,7 +357,10 @@ class Worker():
                 continue
             type_dict[subject_columns[index]] = type(source[source_columns[index]].values[0])
 
-        subject.astype(type_dict)
+## Contributor Breadth Worker Change
+        subject = subject.astype(type_dict)
+
+#        subject.astype(type_dict)
         
         return subject, source
 
@@ -418,8 +424,8 @@ class Worker():
 
                 need_updates = need_updates.drop([column for column in action_map['insert']['augur']], axis='columns')
 
-            self.logger.info(f"final need updates enacted for action map.")
 
+        self.logger.info(f"final need updates enacted for action map.")
 
         # self.logger.info(f'Page needs {len(need_insertion)} insertions and '
         #     f'{len(need_updates)} updates.\n')
